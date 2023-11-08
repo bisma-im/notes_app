@@ -23,6 +23,7 @@ class _NoteCardState extends State<NoteCard> {
         Navigator.of(context).push(MaterialPageRoute(builder: (context)=> NoteView(note: widget.note, index: widget.index, onNoteDeleted: widget.onNoteDeleted)));
         },
       child: Card(
+        color: Theme.of(context).colorScheme.background,
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
@@ -31,8 +32,9 @@ class _NoteCardState extends State<NoteCard> {
               ListTile(
                 title: Text(
                   widget.note.title,
-                  style: const TextStyle(
-                      fontSize: 18
+                  style: TextStyle(
+                      fontSize: 18,
+                      color: Theme.of(context).colorScheme.secondary,
                   ),
                 ),
                 trailing: DropDown(
@@ -45,10 +47,14 @@ class _NoteCardState extends State<NoteCard> {
               const SizedBox(
                 height: 10,
               ),
-              Text(
-                widget.note.body,
-                style: const TextStyle(
-                    fontSize: 18
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text(
+                  widget.note.body,
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
                 ),
               ),
             ],

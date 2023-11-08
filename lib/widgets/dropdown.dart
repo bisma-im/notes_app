@@ -16,6 +16,9 @@ class _DropDownState extends State<DropDown> {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
+      style: TextStyle(
+        color: Theme.of(context).colorScheme.secondary,
+      ),
       value: widget.note.category.isNotEmpty ? widget.note.category : null,
       hint: const Text("Select a category"),
       items: const [

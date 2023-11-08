@@ -20,18 +20,25 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
       return notes.where((note) => note.category == category).toList();
     }
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        title: const Center(
+        backgroundColor: Theme.of(context).colorScheme.background,
+        title: Center(
           child: Text("Notes App",
           style: TextStyle(
-            color: Colors.tealAccent,
+            color: Theme.of(context).colorScheme.secondary,
             fontSize: 26.0
             ),
           ),
         ),
       ),
-      body: _selectedIndex == 0 ? (notes.isEmpty ? const Center(
-        child: Text('Create notes using the button below.'),
+      body: _selectedIndex == 0 ? (notes.isEmpty ? Center(
+        child: Text(
+          'Create notes using the button below.',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.secondary,
+          ),
+        ),
       ) : ListView.builder(
         itemCount: notes.length,
         itemBuilder: (BuildContext context, int index){
@@ -46,6 +53,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
 
       //ListViewBuilder(notes: notes, length: notes.length, context: context, onNoteDeleted: onNoteDeleted, onCategoryChanged: onCategoryChanged),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Theme.of(context).colorScheme.background,
         items: const <BottomNavigationBarItem> [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -65,8 +73,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
           ),
         ],
         currentIndex: _selectedIndex,
-        unselectedItemColor: Colors.white,
-        selectedItemColor: Colors.tealAccent,
+        unselectedItemColor: Theme.of(context).colorScheme.secondary,
+        selectedItemColor: Theme.of(context).colorScheme.primary,
         iconSize: 30.0,
         selectedFontSize: 20.0,
         onTap: (int index) {
@@ -81,6 +89,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
         },
       ),
       floatingActionButton: _selectedIndex == 0 ? FloatingActionButton(
+        backgroundColor: Colors.purple.shade400,
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreateNote(onNewNoteCreated: onNewNoteCreated)));
         },

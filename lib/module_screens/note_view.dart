@@ -10,10 +10,22 @@ class NoteView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        title: const Text('Note View'),
+        iconTheme: IconThemeData(
+          color: Theme.of(context).colorScheme.secondary,
+        ),
+        backgroundColor: Theme.of(context).colorScheme.background,
+        title: Text(
+          'Note View',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.secondary,
+              fontSize: 26.0
+          ),
+        ),
         actions: [
           IconButton(
+            color: Theme.of(context).colorScheme.secondary,
               onPressed: (){
                 showDialog(
                     context: context,
@@ -51,8 +63,9 @@ class NoteView extends StatelessWidget {
           children: [
             Text(
               note.title,
-              style: const TextStyle(
-                  fontSize: 28
+              style: TextStyle(
+                fontSize: 28,
+                color: Theme.of(context).colorScheme.secondary,
               ),
             ),
             const SizedBox(
@@ -60,8 +73,9 @@ class NoteView extends StatelessWidget {
             ),
             Text(
               note.body,
-              style: const TextStyle(
-                  fontSize: 18
+              style: TextStyle(
+                fontSize: 18,
+                color: Theme.of(context).colorScheme.secondary,
               ),
             ),
           ],

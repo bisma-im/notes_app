@@ -45,6 +45,7 @@ class _CreateNoteState extends State<CreateNote> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.purple.shade400,
         onPressed: (){
           if(titleController.text.isEmpty){
             return;
