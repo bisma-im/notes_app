@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:notes_app/models/Note.dart';
 import 'package:notes_app/module_screens/create_note.dart';
 import 'package:notes_app/widgets/note_card.dart';
+
+import '../main.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
   @override
@@ -13,16 +15,20 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
   List<String> categories = ['Home','Complete','Pending','Archived'];
   int _selectedIndex = 0;
   List<Note> filteredNotes = List.empty(growable: true);
+  List<Note> filterNotesByCategory(String category) {
+    return notes.where((note) => note.category == category).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
-    List<Note> filterNotesByCategory(String category) {
-      return notes.where((note) => note.category == category).toList();
-    }
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.background,
+        actions: [Switch(value: themeManager.themeMode == ThemeMode.dark, onChanged: (newValue){
+          themeManager.toggleTheme(newValue);
+        })],
         title: Center(
           child: Text("Notes App",
           style: TextStyle(
