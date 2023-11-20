@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:notes_app/module_screens/home_screen.dart';
+import 'package:notes_app/module_screens/splash_screen.dart';
 import 'package:notes_app/theme/theme.dart';
 import 'package:notes_app/theme/theme_manager.dart';
 
@@ -43,7 +43,7 @@ class _MyAppState extends State<MyApp> {
       theme: lightMode,
       darkTheme: darkMode,
       themeMode: themeManager.themeMode,
-      home: const HomeScreen(),
+      home: SplashScreen(),
     );
   }
 }
