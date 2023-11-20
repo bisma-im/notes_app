@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app/models/Note.dart';
 import 'package:notes_app/module_screens/create_note.dart';
+import 'package:notes_app/module_screens/bottom_nav_bar.dart';
 import 'package:notes_app/widgets/note_card.dart';
 
 import '../main.dart';
@@ -12,13 +13,15 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
   List <Note> notes = List.empty(growable: true);
-  List<String> categories = ['Home','Complete','Pending','Archived'];
+  //List<String> categories = ['Home','Complete','Pending','Archived'];
   int _selectedIndex = 0;
+  List<Note> completedNotes = List.empty(growable: true);
+  List<Note> pendingNotes = List.empty(growable: true);
+  List<Note> archivedNotes = List.empty(growable: true);
   List<Note> filteredNotes = List.empty(growable: true);
   List<Note> filterNotesByCategory(String category) {
     return notes.where((note) => note.category == category).toList();
   }
-
   @override
   Widget build(BuildContext context) {
 
@@ -58,44 +61,25 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
       ),
 
       //ListViewBuilder(notes: notes, length: notes.length, context: context, onNoteDeleted: onNoteDeleted, onCategoryChanged: onCategoryChanged),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Theme.of(context).colorScheme.background,
-        items: const <BottomNavigationBarItem> [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.done_all),
-            label: 'Complete',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.pending),
-            label: 'Pending',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.archive),
-            label: 'Archive',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        unselectedItemColor: Theme.of(context).colorScheme.secondary,
-        selectedItemColor: Theme.of(context).colorScheme.primary,
-        iconSize: 30.0,
-        selectedFontSize: 20.0,
-        onTap: (int index) {
-          setState(() {
-            _selectedIndex = index;
-            switch(index){
-              case 1: filteredNotes = filterNotesByCategory('Complete');
-              case 2: filteredNotes = filterNotesByCategory('Pending');
-              case 3: filteredNotes = filterNotesByCategory('Archive');
-            }
-          });
-        },
+      bottomNavigationBar: BottomNavBar(
+          selectedIndex: _selectedIndex,
+          complete: categoryLength('Complete'),
+          pending: categoryLength('Pending'),
+          archive: categoryLength('Archive'),
+          all: notes.length,
+          onItemTapped: (int index) {
+            setState(() {
+              _selectedIndex = index;
+              switch(index){
+                case 1: filteredNotes = filterNotesByCategory('Complete'); break;
+                case 2: filteredNotes = filterNotesByCategory('Pending'); break;
+                case 3: filteredNotes = filterNotesByCategory('Archive'); break;
+              }
+            });
+          },
       ),
       floatingActionButton: _selectedIndex == 0 ? FloatingActionButton(
-        backgroundColor: Colors.purple.shade400,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreateNote(onNewNoteCreated: onNewNoteCreated)));
         },
@@ -116,5 +100,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
     setState(() {
       notes[index].category = newCategory;
     });
+  }
+  int categoryLength(String newCategory){
+    int len = 0;
+    newCategory == 'Complete' ? len = notes.where((note) => note.category == 'Complete').toList().length :
+    newCategory == 'Pending' ? len = notes.where((note) => note.category == 'Pending').toList().length:
+    len = notes.where((note) => note.category == 'Archive').toList().length;
+    return len;
   }
 }
