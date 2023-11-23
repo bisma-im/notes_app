@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app/models/Note.dart';
 import 'package:notes_app/module_screens/create_note.dart';
-import 'package:notes_app/module_screens/bottom_nav_bar.dart';
+import 'package:notes_app/widgets/bottom_nav_bar.dart';
 import 'package:notes_app/widgets/note_card.dart';
-
+import 'package:notes_app/widgets/note_card_skeleton.dart';
 import '../main.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,12 +12,30 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
+
+  bool loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  Future loadData() async{
+    setState(() {
+      loading = true;
+    });
+
+    await Future.delayed(const Duration(seconds: 4), (){
+      setState(() {
+        loading = false;
+      });
+    });
+  }
+
   List <Note> notes = List.empty(growable: true);
   //List<String> categories = ['Home','Complete','Pending','Archived'];
   int _selectedIndex = 0;
-  List<Note> completedNotes = List.empty(growable: true);
-  List<Note> pendingNotes = List.empty(growable: true);
-  List<Note> archivedNotes = List.empty(growable: true);
   List<Note> filteredNotes = List.empty(growable: true);
   List<Note> filterNotesByCategory(String category) {
     return notes.where((note) => note.category == category).toList();
@@ -50,12 +68,16 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
         ),
       ) : ListView.builder(
         itemCount: notes.length,
-        itemBuilder: (BuildContext context, int index){
-          return NoteCard(note: notes[index], index: index, onNoteDeleted: onNoteDeleted, onCategoryChanged: onCategoryChanged, isEnabled: true);
-        },
+        itemBuilder: loading ? (BuildContext context, int index){
+            return noteSkeleton(context);
+          } : (BuildContext context, int index){
+            return NoteCard(note: notes[index], index: index, onNoteDeleted: onNoteDeleted, onCategoryChanged: onCategoryChanged, isEnabled: true);
+            },
       )) : ListView.builder(
         itemCount: filteredNotes.length,
-        itemBuilder: (BuildContext context, int index){
+        itemBuilder: loading ? (BuildContext context, int index){
+          return noteSkeleton(context);
+        } : (BuildContext context, int index){
           return NoteCard(note: filteredNotes[index], index: index, onNoteDeleted: onNoteDeleted, onCategoryChanged: onCategoryChanged, isEnabled: false);
         },
       ),
@@ -68,6 +90,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
           archive: categoryLength('Archive'),
           all: notes.length,
           onItemTapped: (int index) {
+            loadData();
             setState(() {
               _selectedIndex = index;
               switch(index){
@@ -101,6 +124,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
       notes[index].category = newCategory;
     });
   }
+
   int categoryLength(String newCategory){
     int len = 0;
     newCategory == 'Complete' ? len = notes.where((note) => note.category == 'Complete').toList().length :

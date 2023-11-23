@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app/models/Note.dart';
+import '../widgets/create_view_note_skeleton.dart';
 
 class CreateNote extends StatefulWidget {
   const CreateNote({super.key,required this.onNewNoteCreated});
@@ -9,7 +10,25 @@ class CreateNote extends StatefulWidget {
 }
 
 class _CreateNoteState extends State<CreateNote> {
+  bool loading = true;
 
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  Future loadData() async{
+    setState(() {
+      loading = true;
+    });
+
+    await Future.delayed(const Duration(seconds: 4), (){
+      setState(() {
+        loading = false;
+      });
+    });
+  }
   final titleController = TextEditingController();
   final bodyController = TextEditingController();
 
@@ -19,7 +38,7 @@ class _CreateNoteState extends State<CreateNote> {
       appBar: AppBar(
         title: const Text("New Note"),
       ),
-      body: Padding(
+      body: loading ? NoteSkeleton(context) : Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
           children: [

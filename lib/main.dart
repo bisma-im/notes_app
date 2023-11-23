@@ -43,7 +43,7 @@ class _MyAppState extends State<MyApp> {
       theme: lightMode,
       darkTheme: darkMode,
       themeMode: themeManager.themeMode,
-      home: SplashScreen(),
+      home: const SplashScreen(),
     );
   }
 }
